@@ -19,7 +19,7 @@ public class PlayerMovement : MonoBehaviour
     private float topWall;
     private float bottomWall;
 
-    public float speed = 35f;
+    public float speed;
     
     private void Start()
     {

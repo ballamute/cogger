@@ -4,26 +4,34 @@ using UnityEngine;
 
 public class Bullet : MonoBehaviour
 {
-    public float speed = 100f; 
     public int damage = 1;
     public Rigidbody2D rb;
     private float camHeight;
+    private float camWidth;
 
-    private Vector2 cam_pos;
+    private Vector2 camPos;
+    private float rightWall;
+    private float leftWall;
+    private float topWall;
+    private float bottomWall;
 
     void Start()
     {
         var mainCam = Camera.main;
         if (mainCam == null) return;
         camHeight = mainCam.orthographicSize;
-        cam_pos = mainCam.transform.position;
-        rb.velocity = new Vector2(0, speed);
+        camWidth = camHeight * mainCam.aspect;
+        camPos = mainCam.transform.position;
+        rightWall = camPos.x + camWidth; 
+        leftWall = camPos.x - camWidth;
+        topWall = camPos.y + camHeight;
+        bottomWall = camPos.y - camHeight;
     }
 
     void Update()
     {
         Vector2 pos = transform.position;
-        if (pos.y > cam_pos.y + camHeight)
+        if (pos.y < bottomWall || pos.y > topWall || pos.x > rightWall || pos.x < leftWall)
         {
             Destroy(gameObject);
         }

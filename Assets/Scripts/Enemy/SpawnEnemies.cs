@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using JetBrains.Annotations;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -8,16 +9,23 @@ public class SpawnEnemies : MonoBehaviour
     // Start is called before the first frame update
 
     private float canSpawn;
-    public float spawnDelay = 10f;
-    public GameObject enemy;
+    public float spawnDelay;
     public int to_spawn_amt = 5;
-    public Transform spawnPoint;
-    public Vector2 pos;
+    
+    
+    public List<GameObject> enemies;
+    public List<Transform> spawnPoints;
+    public List<Vector2> pos;
+    
+    private int wavesCount;
     private CountEnemies _countEnemies;
     void Start()
     {
         _countEnemies = GameObject.FindWithTag("EnemiesCounter").GetComponent<CountEnemies>();
-        pos = spawnPoint.position;
+        foreach (var spawnPoint in spawnPoints)
+        {
+            pos.Add(spawnPoint.position);
+        }
     }
 
     // Update is called once per frame
@@ -25,11 +33,23 @@ public class SpawnEnemies : MonoBehaviour
     {
         if (Time.time >= canSpawn || _countEnemies.enemiesNow <= 0)
         {
-            for (int i = 0; i < to_spawn_amt; ++i)
+            
+            if (wavesCount % 5 == 0)
             {
-                Instantiate(enemy, new Vector2(pos.x + i * 8, pos.y), spawnPoint.rotation);
+                Instantiate(enemies[1], spawnPoints[1].position, spawnPoints[1].rotation);
                 _countEnemies.enemiesNow += 1;
                 canSpawn = Time.time + spawnDelay;
+                wavesCount += 1;
+            }
+            else
+            {
+                for (int i = 0; i < to_spawn_amt; ++i)
+                {
+                    Instantiate(enemies[0], new Vector2(pos[0].x + i * 8, pos[0].y), spawnPoints[0].rotation);
+                    _countEnemies.enemiesNow += 1;
+                    canSpawn = Time.time + spawnDelay;
+                }
+                wavesCount += 1;
             }
         }
     }
