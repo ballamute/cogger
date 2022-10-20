@@ -4,30 +4,39 @@ using UnityEngine;
 
 public class EnemyBullet : MonoBehaviour
 {
-
-    public float speed = 50f; 
     public int damage = 1;
     public Rigidbody2D rb;
     private float camHeight;
+    private float camWidth;
+
     private float delay = 1f;
     private AllowDamage _allowDamage;
 
-    private Vector2 cam_pos;
+    private Vector2 camPos;
+    private float rightWall;
+    private float leftWall;
+    private float topWall;
+    private float bottomWall;
 
     void Start()
     {
+        _allowDamage = GameObject.FindWithTag("DamageAllower").GetComponent<AllowDamage>();
+
         var mainCam = Camera.main;
         if (mainCam == null) return;
         camHeight = mainCam.orthographicSize;
-        cam_pos = mainCam.transform.position;
-        rb.velocity = new Vector2(0, -speed);
-        _allowDamage = GameObject.FindWithTag("DamageAllower").GetComponent<AllowDamage>();
+        camWidth = camHeight * mainCam.aspect;
+        camPos = mainCam.transform.position;
+        rightWall = camPos.x + camWidth; 
+        leftWall = camPos.x - camWidth;
+        topWall = camPos.y + camHeight;
+        bottomWall = camPos.y - camHeight;
     }
 
     void Update()
     {
         Vector2 pos = transform.position;
-        if (pos.y < cam_pos.y - camHeight)
+        if (pos.y < bottomWall || pos.y > topWall || pos.x > rightWall || pos.x < leftWall)
         {
             Destroy(gameObject);
         }

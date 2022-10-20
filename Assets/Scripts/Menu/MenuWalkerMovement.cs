@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Newtonsoft.Json.Serialization;
 using UnityEngine;
 using UnityEngine.UIElements;
 using Random = System.Random;
@@ -36,6 +37,10 @@ public class MenuWalkerMovement : MonoBehaviour
     private float speedupDelay = 5f;
     private int speedupVal = 100;
 
+    private int loop;
+    private bool stopped = false;
+    private float startTimer;
+
     void Start()
     { 
         walkerColl = GetComponent<CircleCollider2D>();
@@ -53,11 +58,26 @@ public class MenuWalkerMovement : MonoBehaviour
         leftWall = camPos.x - camWidth;
         topWall = camPos.y + camHeight;
         bottomWall = camPos.y - camHeight;
+
+        startTimer = Time.time;
     }
     
     void Update()
     {
-        if (Time.realtimeSinceStartup > speedupTime)
+        if ((int)(Time.time - startTimer) == 89*(loop + 1) + loop*8 && !stopped)
+        {
+            stopped = true;
+            loop += 1;
+            randX = 0;
+            randY = 0;
+        }
+        if ((int)(Time.time - startTimer) % 97 == 0 && stopped)
+        {
+            stopped = false;
+            randX = rnd.Next(-speed*100, speed*100) / 100f; 
+            randY = sign[rnd.Next(0, 2)] * (float)Math.Sqrt(Math.Abs(speed*speed - randX*randX));
+        }
+        if (Time.time - startTimer > speedupTime)
         {
             speed += speedupVal;
             speedupTime += speedupDelay;
@@ -83,8 +103,12 @@ public class MenuWalkerMovement : MonoBehaviour
             randX = rnd.Next(-speed*100, speed*100) / 100f;
             randY = -Math.Abs(sign[rnd.Next(0, 2)] * (float)Math.Sqrt(Math.Abs(speed*speed - randX*randX)));
         }
-            
-        transform.Rotate(new Vector3(0, 0, degreesPerSecond) * Time.deltaTime);
+
+        if (!stopped)
+        {
+            transform.Rotate(new Vector3(0, 0, degreesPerSecond) * Time.deltaTime);
+        }
+        
 
         pos.x += randX * Time.deltaTime;
         pos.y += randY * Time.deltaTime;

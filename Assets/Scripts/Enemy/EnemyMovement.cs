@@ -12,10 +12,12 @@ public class EnemyMovement : MonoBehaviour
     private float camHeight;
     private float bottomWall;
     private Player _player;
+    private Enemy _enemy;
     
     void Start()
     {
         _player = GameObject.FindWithTag("Player").GetComponent<Player>();
+        _enemy = gameObject.GetComponent<Enemy>();
         var mainCam = Camera.main;
         if (mainCam == null) return;
         camHeight = mainCam.orthographicSize;
@@ -34,7 +36,7 @@ public class EnemyMovement : MonoBehaviour
         pos.y -= moveSpeed * Time.fixedDeltaTime;
         if (pos.y < cam_pos.y - camHeight)
         {
-            Destroy(gameObject);
+            _enemy.Die();
             _player.TakeDamage(coll_damage);
         }
         transform.position = pos;

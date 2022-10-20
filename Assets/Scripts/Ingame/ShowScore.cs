@@ -15,7 +15,7 @@ public class ShowScore : MonoBehaviour
     {
         _scoreText = GetComponent<Text>();
         _player = GameObject.FindWithTag("Player").GetComponent<Player>();
-        _toWin = _player.scoretoWIn.ToString();
+        _toWin = _player.scoreToWIn.ToString();
         _scoreText.text = _player.score + " / " + _toWin;
     }
 

@@ -7,6 +7,7 @@ TagManager:
   - EnemiesCounter
   - DamageAllower
   - GameManager
+  - PowerUps
   layers:
   - Default
   - TransparentFX
@@ -17,7 +18,7 @@ TagManager:
   - Player
   - Enemy
   - EnemyBullet
-  - 
+  - PowerUps
   - 
   - 
   - 
