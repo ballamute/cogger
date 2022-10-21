@@ -39,7 +39,7 @@ public class Enemy : MonoBehaviour
         } else if (fate < 15)
         {
             Instantiate(boosters[1], spawnPoint.position,  Quaternion.identity);
-        } else if (fate < 18)
+        } else if (fate < 20)
         {
             Instantiate(boosters[2], spawnPoint.position,  Quaternion.identity);
         }
